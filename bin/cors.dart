@@ -22,7 +22,7 @@ void main(List<String> arguments) async {
   final proxy = CorsProxy.mcp(target: targetUri, host: '0.0.0.0', port: port);
 
   await proxy.start();
-  final boundPort = proxy.boundPort!;
+  final boundPort = proxy.boundPort;
   print('CORS proxy listening on http://localhost:$boundPort');
 
   // Keep running until the user terminates (Ctrl-C)

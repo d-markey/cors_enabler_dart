@@ -46,7 +46,8 @@ void main() {
     );
     await proxy.start();
 
-    final proxyPort = proxy.boundPort!;
+    expect(proxy.isRunning, true);
+    final proxyPort = proxy.boundPort;
     return (proxy, Uri.parse('http://${proxy.host}:$proxyPort/'));
   }
 
@@ -59,11 +60,12 @@ void main() {
     final body = await utf8.decoder.bind(resp).join();
 
     expect(resp.statusCode, HttpStatus.ok);
-    expect(resp.accessControlAllowOrigin, '*');
+    expect(resp.headers.accessControlAllowOrigin, '*');
     expect(body, 'upstream:GET /');
 
     client.close();
     await proxy.stop();
+    expect(proxy.isRunning, false);
   });
 
   test('CORS proxy sets CORS headers', () async {
@@ -73,10 +75,11 @@ void main() {
     final req = await client.openUrl('OPTIONS', proxyUri);
     final resp = await req.close();
     expect(resp.statusCode, equals(HttpStatus.noContent));
-    expect(resp.accessControlAllowOrigin, '*');
+    expect(resp.headers.accessControlAllowOrigin, '*');
 
     client.close();
     await proxy.stop();
+    expect(proxy.isRunning, false);
   });
 
   test('CORS proxy sets CORS headers - allowCredentials = true', () async {
@@ -87,10 +90,11 @@ void main() {
     req.headers.add('origin', 'http://caller.com');
     final resp = await req.close();
     expect(resp.statusCode, equals(HttpStatus.noContent));
-    expect(resp.accessControlAllowOrigin, 'http://caller.com');
+    expect(resp.headers.accessControlAllowOrigin, 'http://caller.com');
 
     client.close();
     await proxy.stop();
+    expect(proxy.isRunning, false);
   });
 
   test('MCP CORS proxy sets CORS headers', () async {
@@ -100,19 +104,15 @@ void main() {
     final req = await client.openUrl('OPTIONS', proxyUri);
     final resp = await req.close();
     expect(resp.statusCode, equals(HttpStatus.noContent));
-    expect(resp.accessControlAllowOrigin, '*');
-    expect(resp.accessControlAllowHeaders, contains('mcp-session-id'));
-    expect(resp.accessControlAllowHeaders, contains('mcp-protocol-version'));
+    expect(resp.headers.accessControlAllowOrigin, '*');
+    expect(resp.headers.accessControlAllowHeaders, contains('mcp-session-id'));
+    expect(
+      resp.headers.accessControlAllowHeaders,
+      contains('mcp-protocol-version'),
+    );
 
     client.close();
     await proxy.stop();
+    expect(proxy.isRunning, false);
   });
-}
-
-extension on HttpClientResponse {
-  String get accessControlAllowOrigin =>
-      headers.value('access-control-allow-origin')?.toLowerCase() ?? '';
-
-  String get accessControlAllowHeaders =>
-      headers.value('access-control-allow-headers')?.toLowerCase() ?? '';
 }
