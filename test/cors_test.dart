@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:cors_proxy/cors_proxy.dart';
+import 'package:cors_enabler/cors_enabler.dart';
 import 'package:test/test.dart';
 
 void main() {

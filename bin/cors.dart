@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:cors_proxy/cors_proxy.dart';
+import 'package:cors_enabler/cors_enabler.dart';
 
 void main(List<String> arguments) async {
   // Simple runner for the CORS proxy.
