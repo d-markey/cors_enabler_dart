@@ -1,6 +1,6 @@
 name: cors_enabler
 description: A CORS proxy to make any API server CORS-compliant.
-version: 0.9.1
+version: 0.9.1+1
 repository: https://github.com/d-markey/cors_enabler_dart
 
 environment:

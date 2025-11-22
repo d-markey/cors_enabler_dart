@@ -6,10 +6,21 @@ The proxy will add permissive CORS headers so that browsers can access the proxi
 Usage
 -----
 
+```dart
+  // start a local proxy forwarding to `targetUri`
+  final proxy = CorsProxy(target: targetUri);
+  await proxy.start();
+  // the local proxy is listening on `boundPort`
+  final boundPort = proxy.boundPort;
+```
+
+Example Usage
+-------------
+
 Run from the project root:
 
 ```bash
-dart run bin/cors.dart https://api.target.com/ 8080
+dart run example/cors.dart https://api.target.com/ 8080
 ```
 
 Then request:

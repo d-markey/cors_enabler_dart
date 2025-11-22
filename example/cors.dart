@@ -6,7 +6,7 @@ void main(List<String> arguments) async {
   // Simple runner for the CORS proxy.
   // Usage: dart run bin/cors.dart <target-url> [port]
   if (arguments.isEmpty) {
-    print('Usage: dart run bin/cors.dart <target-url> [port]');
+    print('Usage: dart run example/cors.dart <target-url> [port]');
     exit(2);
   }
 
@@ -19,8 +19,7 @@ void main(List<String> arguments) async {
   }
 
   final port = arguments.length > 1 ? int.tryParse(arguments[1]) ?? 8080 : 8080;
-  final proxy = CorsProxy.mcp(target: targetUri, host: '0.0.0.0', port: port);
-
+  final proxy = CorsProxy(target: targetUri, port: port);
   await proxy.start();
   final boundPort = proxy.boundPort;
   print('CORS proxy listening on http://localhost:$boundPort');
